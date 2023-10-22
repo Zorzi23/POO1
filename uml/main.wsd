@@ -1,0 +1,63 @@
+@startuml Sistema Academico
+
+class Pessoa {
+  - nome: String
+}
+
+class Curso {
+  - nome: String
+  - fases: Fase[]
+  + adicionarFase(fase: Fase): void
+  + listarDisciplinasOfertadas(): void
+}
+
+class Fase {
+  - numero: int
+  - disciplinas: Disciplina[]
+  + adicionarDisciplina(disciplina: Disciplina): void
+}
+
+class Disciplina {
+  - nome: String
+  - professores: Professor[]
+  - frequencias: Frequencia[]
+  + adicionarProfessor(professor: Professor): void
+  + registrarFrequencia(frequencia: Frequencia): void
+}
+
+class Aluno {
+  - nome: String
+  - matriculas: Matricula[]
+  + matricular(disciplina: Disciplina, fase: Fase): void
+}
+
+class Professor {
+  - nome: String
+  - leciona: Disciplina[]
+}
+
+class Matricula {
+  - aluno: Aluno
+  - disciplina: Disciplina
+  - fase: Fase
+}
+
+class Frequencia {
+  - data: Date
+  - professor: Professor
+  - disciplina: Disciplina
+}
+
+Pessoa <|-- Aluno
+Pessoa <|-- Professor
+Curso *-- Fase : Um curso é composto por várias fases, e esta é uma relação de composição.
+Fase o-- Disciplina : Uma fase contém várias disciplinas, uma relação de agregação.
+Disciplina -- Professor : As disciplinas são associadas aos professores, uma relação de associação.
+Disciplina *-- Frequencia : Cada disciplina é composta por várias frequências, uma relação de composição.
+Aluno *-- Matricula : Um aluno pode ter várias matrículas, uma relação de composição.
+Matricula -- Disciplina : Cada matrícula está associada a uma disciplina, uma relação de associação.
+Matricula -- Fase : Cada matrícula está associada a uma fase, uma relação de associação.
+Frequencia -- Professor : Cada frequência é associada a um professor, uma relação de associação.
+Frequencia -- Disciplina : Cada frequência é associada a uma disciplina, uma relação de associação.
+
+@enduml

@@ -1,43 +1,51 @@
-import java.util.Date;
-import java.util.Scanner;
-import atendimento_medico.*;
+
+import sistema_academico.*;
 
 public class App {
-
     public static void main(String[] args) {
-        ControllerTriagem triagemController = new ControllerTriagem();
-        Scanner scanner = new Scanner(System.in);
+        // Criando um aluno
+        Aluno aluno = new Aluno("João");
+        System.out.println("Aluno criado: " + aluno.getNome());
 
-        Cliente cliente1 = new Cliente("Cliente 1", new Date());
-        Cliente cliente2 = new Cliente("Cliente 2", new Date());
-        Cliente cliente3 = new Cliente("Cliente 3", new Date());
+        // Criando um professor
+        Professor professor = new Professor("Maria");
+        System.out.println("Professor criado: " + professor.getNome());
 
-        Triagem triagem1 = new Triagem(cliente1, Prioridade.EMERGENCIA, new Date(), new Questionario(10, "Dor intensa", false, null, null, ""));
-        Triagem triagem2 = new Triagem(cliente2, Prioridade.MUITO_URGENTE, new Date(), new Questionario(8, "Dor moderada", true, null, null, ""));
-        Triagem triagem3 = new Triagem(cliente3, Prioridade.URGENTE, new Date(), new Questionario(6, "Dor leve", false, null, null, ""));
+        // Criando um curso
+        Curso curso = new Curso("Engenharia");
+        System.out.println("Curso criado: " + curso.getNome());
 
-        triagemController.adicionarTriagem(triagem1);
-        triagemController.adicionarTriagem(triagem2);
-        triagemController.adicionarTriagem(triagem3);
+        // Criando uma fase
+        Fase fase = new Fase(1);
+        System.out.println("Fase criada: " + fase.getNumero());
 
-        triagemController.ordenarPorPrioridade();
+        // Criando disciplinas
+        Disciplina disciplina1 = new Disciplina("Matemática");
+        Disciplina disciplina2 = new Disciplina("Física");
+        System.out.println("Disciplinas criadas: " + disciplina1.getNome() + ", " + disciplina2.getNome());
 
-        while (!triagemController.getTriagens().isEmpty()) {
-            Triagem proximaTriagem = triagemController.getTriagens().get(0);
-            System.out.println("Atendendo próximo paciente: " + proximaTriagem.getCliente().getNome());
+        // Associando professor às disciplinas
+        disciplina1.adicionarProfessor(professor);
+        disciplina2.adicionarProfessor(professor);
+        System.out.println("Professor associado às disciplinas.");
 
-            Atendimento atendimento = triagemController.atenderProximoPaciente();
-            if (atendimento != null) {
-                System.out.print("Deseja emitir um atestado para " + atendimento.getCliente().getNome() + "? (Sim ou Não): ");
-                String escolha = scanner.nextLine().trim().toLowerCase();
-                if (escolha.equals("sim")) {
-                    atendimento.setEmiteAtestado(true);
-                    System.out.println("Atestado emitido para " + atendimento.getCliente().getNome());
-                }
-            }
-        }
+        // Matriculando o aluno em disciplinas
+        aluno.matricular(disciplina1, fase);
+        aluno.matricular(disciplina2, fase);
+        System.out.println("Aluno matriculado nas disciplinas: " + disciplina1.getNome() + ", " + disciplina2.getNome());
 
-        System.out.println("Todos os pacientes foram atendidos.");
-        scanner.close();
+        // Adicionando disciplinas à fase
+        fase.adicionarDisciplina(disciplina1);
+        fase.adicionarDisciplina(disciplina2);
+        System.out.println("Disciplinas adicionadas à fase.");
+
+        // Adicionando a fase ao curso
+        curso.adicionarFase(fase);
+        System.out.println("Fase adicionada ao curso.");
+
+        // Listando as disciplinas ofertadas no curso
+        System.out.println("Disciplinas ofertadas no curso:");
+        curso.listarDisciplinasOfertadas();
     }
+
 }
